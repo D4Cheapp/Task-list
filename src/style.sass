@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap')
+
+$dark-tan: #710D25
+$radical-red: #ff4161
+$bismark: #487686
+$elephant: #13334C
+$black-pearl: #091930
+
+body
+  font-family: 'Roboto', sans-serif
+  background: $elephant
+
+  margin: 0
+  padding-top: 200px
+  min-height: 100vh
+
+  display: flex
+  overflow: hidden
+  justify-content: center
+  align-items: flex-start
+
+
+section.Todo-List
+  width: 50vw
+
+
+header.Todo-List__Header
+  display: flex
+  flex-direction: column
+
+  h1.Todo-List__Header__Title
+    color: $radical-red
+    font-size: 40px
+    font-weight: 700
+
+  input.Todo-List__Header__Input
+    width: calc(100% - 20px)
+    padding: 10px
+    height: 2vw
+
+    outline: none
+    border: 1px transparent solid
+    border-radius: 15px
+
+    background: $bismark
+    color: $dark-tan
+
+    &::placeholder
+      color: $elephant
+
+    &:focus
+      border: 1px $radical-red solid
+
+
+footer.Todo-List__Footer-Buttons
+  display: inline-flex
+  justify-content: space-between
+  align-items: center
+
+  width: 100%
+  margin-top: 1.5vw
+
+  font-size: 1vw
+  text-align: center
+  color: $radical-red
+
+  label.Todo-List__Footer-Buttons__Label
+    display: inline-block
+    padding-block: 3px
+    width: 8vw
+
+    user-select: none
+    cursor: pointer
+
+    border: 1px $radical-red solid
+    border-radius: 8px
+    transition: .2s
+
+  input.Todo-List__Footer-Buttons__Input
+    opacity: 0
+    z-index: -1
+    position: absolute
+
+    &:checked + label.Todo-List__Footer-Buttons__Label
+      color: $dark-tan
+      border: 1px $dark-tan solid
+
+    &:active + label.Todo-List__Footer-Buttons__Label
+      color: $dark-tan
+      border: 1px $dark-tan solid
+
+
+div.Todo-List__Footer-Buttons__Tasks-Type
+  width: 50%
+  display: inline-flex
+  justify-content: space-around
+
+  label.Todo-List__Footer-Buttons__Label
+    width: 6vw
+
+
+p.Todo-List__Footer-Buttons__Tasks-Count
+  margin: 0
+
+
+div.Todo-List__Tasks
+  margin-top: 1.5vw
+  display: flex
+  flex-direction: column
+  gap: 1vw
+
+  overflow-x: hidden
+  overflow-y: auto
+  max-height: 40vh
+
+
+div.Todo-List__Tasks__Task
+  color: $radical-red
+  background: $bismark
+
+  padding: 10px
+  border-radius: 10px
+
+
