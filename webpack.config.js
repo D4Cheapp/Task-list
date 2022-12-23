@@ -1,46 +1,63 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const path = require('path');
 
-module.exports={
+module.exports = {
   //Режим проекта и точка входа
   mode: 'development',
-  entry: path.resolve(__dirname,'./src/main.js'),
-  optimization: {
-    runtimeChunk: 'single',
-  },
-  //Настройки сервера
+  entry: path.resolve(__dirname,'src/main.js'),
+  //Настройка сервера
   devServer: {
-    watchFiles: [path.resolve(__dirname,"src")],
-    historyApiFallback: true,
-    port:3000,
-    hot:true,
+    port: 3000,
+    hot: true,
   },
-  //Выходной main файл
+  //Выходные файлы
   output: {
-    filename: `[name].js`,
-    path: path.resolve(__dirname,'dist')
+    path: path.resolve(__dirname,'dist'),
+    filename: '[name].js',
+    clean: true,
   },
   module: {
     rules: [
       {
+        //Обработка html файлов
+        test: /\.html$/,
+        loader: 'html-loader',
+      },{
+        //Обработка css файлов
         test: /\.css$/,
         use: ["style-loader",'css-loader']
-      },
-      {
-        //Компиляция из scss в css
+      },{
+        //Компиляция из sass в css
         test: /\.(sass)$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader', {
-          loader: 'sass-loader'
-      }]},{
-        //Обработка картинок, иконок, svg
-        test: /\.(ico)$/,
-        use: [{
-          loader: 'file-loader',
+        use: ['style-loader', 'css-loader', {
+          loader: 'postcss-loader',
           options: {
-            name: '[name].[ext]'
-        }}]}]
-  },
-  plugins: [new HtmlWebpackPlugin({template: path.resolve(__dirname,'./src/index.html')}),
-   new CleanWebpackPlugin()]
-}
+            postcssOptions: {
+              plugins: [require('postcss-preset-env')],
+          }}},{
+          loader: 'sass-loader'
+      }]
+      },{
+        //Обработка иконок
+        test: /\.ico$/,
+        use: [{
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]'
+      }}]
+      },{
+        //Применение babel к js
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+      }}},
+  ]},
+  plugins: [// Настройка плагина HtmlWebpackPlugin
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: './index.html',
+    })]
+};

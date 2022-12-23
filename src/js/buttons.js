@@ -1,6 +1,7 @@
-document.getElementById("Clear").addEventListener("click",Clear)
+document.getElementById("ClearCompleted").addEventListener("click",Clear)
 
 function Clear(){
+    document.getElementsByClassName("Todo-List__Header__Title")[0].textContent = "Popchik";
     localStorage.clear()
 }
 function Completed(e){

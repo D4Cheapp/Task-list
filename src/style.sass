@@ -11,7 +11,7 @@ body
   background: $elephant
 
   margin: 0
-  padding-top: 200px
+  padding-top: 15vw
   min-height: 100vh
 
   display: flex
@@ -111,7 +111,7 @@ div.Todo-List__Tasks
 
   overflow-x: hidden
   overflow-y: auto
-  max-height: 40vh
+  max-height: 20vw
 
 
 div.Todo-List__Tasks__Task
@@ -121,4 +121,9 @@ div.Todo-List__Tasks__Task
   padding: 10px
   border-radius: 10px
 
+  &::after
+    content: ""
+    opacity: 1
+    width: 20px
+    height: 20px
 
