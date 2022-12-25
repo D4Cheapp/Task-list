@@ -1,4 +1,5 @@
-import {refreshTaskCounter} from "./buttons";
+import {storage} from "./localStorageReading";
+import {createTask, refreshTaskCounter} from "./exportedFunction";
 
 //Получение ссылок на поле ввода и список задач
 const inputTodos = document.getElementById("Todo-List__Input");
@@ -19,39 +20,18 @@ inputTodos.addEventListener("keypress", (e) => {
         inputTodos.value = "";
 
         //Создание элемента задачи для добавления в список
-        let task = createTask(taskText);
+        let task = createTask(taskText,false,
+            document.getElementsByClassName("Todo-List__Tasks__Task").length.toString());
 
         //Изменение счетчика задач и добавление задачи в список
         taskContainer.append(task);
+        let taskJson = {
+            title: taskText.toString(),
+            completed: false,
+            id: Date.now()
+        }
+        storage.push(taskJson);
+        localStorage.setItem("todoList", JSON.stringify(storage));
         refreshTaskCounter();
     }
 })
-//Функция создания задачи
-function createTask(taskText){
-    //Создание родительского div контейнера
-    let task = document.createElement("div");
-    task.classList.add("Todo-List__Tasks__Task");
-    task.setAttribute("data-id",
-        document.getElementsByClassName("Todo-List__Tasks__Task").length.toString());
-
-    //Текст задачи
-    let label = document.createElement("label");
-    label.innerHTML = taskText;
-    label.classList.add("Todo-List__Tasks__Task__Label");
-    task.insertAdjacentElement("afterbegin",label);
-
-    //Кнопка завершения задачи
-    let completeInput = document.createElement("input");
-    completeInput.classList.add("Todo-List__Tasks__Task__Toggle-Check");
-    completeInput.type = "checkBox";
-    completeInput.addEventListener("click", () => task.classList.toggle("Completed"));
-    task.insertAdjacentElement("afterbegin",completeInput);
-
-    //Кнопка удаления задачи
-    let deleteInput = document.createElement("button");
-    deleteInput.classList.add("Todo-List__Tasks__Task__Delete-Task");
-    deleteInput.addEventListener("click", () => {task.remove(); refreshTaskCounter()})
-    task.insertAdjacentElement("beforeend", deleteInput);
-
-    return task
-}

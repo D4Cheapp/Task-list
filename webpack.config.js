@@ -45,23 +45,10 @@ module.exports = {
           loader: 'file-loader',
           options: {
             name: '[path]/[name].[ext]'
-      }},{
-        // Оптимизация всех изображений
-        loader: "webp-loader",
-        options: {
-          quality: 50
-      }}]},{
-        //Применение babel к js
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-      }}},
+      }}]}
   ]},
   plugins: [// Настройка плагина HtmlWebpackPlugin
     new HtmlWebpackPlugin({
-      favicon: path.resolve(__dirname,'src/favicon.png'),
+      favicon: path.resolve(__dirname,'src/favicon.svg'),
       template: path.resolve(__dirname,'src/index.html')})]
 };

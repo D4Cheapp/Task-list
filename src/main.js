@@ -1,9 +1,13 @@
+//Подключение стилей
 import "./style.sass";
 import "normalize.css";
 
-import "./js/taskAdd";
-import "./js/localStorageReading";
-import "./js/buttons";
+//Подключение скриптов
+import "./js/taskAdd.js";
+import "./js/localStorageReading.js";
+import "./js/buttons.js";
+import "./js/exportedFunction";
 
-import "./favicon.png";
+//Подключение иконок и картинок
+import "./favicon.svg";
 import "./cross-mark.svg";
