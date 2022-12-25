@@ -8,7 +8,7 @@
   <meta name="Keywords" content="todo список дела">
   <meta name="description" content="Сайт для сохранения списка дел">
 
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="favicon.png">
 </head>
 <body>
   <section class="Todo-List">
@@ -23,17 +23,17 @@
           <p class="Todo-List__Footer-Buttons__Tasks-Count" id="Tasks-Counter">0 tasks left</p>
 
           <div class="Todo-List__Footer-Buttons__Tasks-Type">
-              <input class="Todo-List__Footer-Buttons__Input All" id="All" name="taskState" type="radio">
-              <label class="Todo-List__Footer-Buttons__Label" for="All">All</label>
+              <input class="Todo-List__Footer-Buttons__Input" id="All-Tasks" name="taskState" type="radio" checked="checked">
+              <label class="Todo-List__Footer-Buttons__Label" for="All-Tasks">All</label>
 
-              <input class="Todo-List__Footer-Buttons__Input Active" id="Active" name="taskState" type="radio">
-              <label class="Todo-List__Footer-Buttons__Label" for="Active">Active</label>
+              <input class="Todo-List__Footer-Buttons__Input" id="Active-Tasks" name="taskState" type="radio">
+              <label class="Todo-List__Footer-Buttons__Label" for="Active-Tasks">Active</label>
 
-              <input class="Todo-List__Footer-Buttons__Input Completed" id="Completed" name="taskState" type="radio">
-              <label class="Todo-List__Footer-Buttons__Label" for="Completed">Completed</label>
+              <input class="Todo-List__Footer-Buttons__Input" id="Completed-Tasks" name="taskState" type="radio">
+              <label class="Todo-List__Footer-Buttons__Label" for="Completed-Tasks">Completed</label>
           </div>
 
-          <input type="button" class="Todo-List__Footer-Buttons__Input Clear" id="ClearCompleted"/>
+          <input type="button" class="Todo-List__Footer-Buttons__Input" id="ClearCompleted"/>
           <label class="Todo-List__Footer-Buttons__Label" for="ClearCompleted">Clear completed</label>
       </footer>
   </section>

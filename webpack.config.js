@@ -7,6 +7,7 @@ module.exports = {
   entry: path.resolve(__dirname,'src/main.js'),
   //Настройка сервера
   devServer: {
+    watchFiles: path.resolve(__dirname,"src/index.html"),
     port: 3000,
     hot: true,
   },
@@ -19,10 +20,6 @@ module.exports = {
   module: {
     rules: [
       {
-        //Обработка html файлов
-        test: /\.html$/,
-        loader: 'html-loader',
-      },{
         //Обработка css файлов
         test: /\.css$/,
         use: ["style-loader",'css-loader']
@@ -38,14 +35,22 @@ module.exports = {
           loader: 'sass-loader'
       }]
       },{
-        //Обработка иконок
-        test: /\.ico$/,
-        use: [{
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]'
-      }}]
+        //Обработка ico и svg
+        test: /\.(svg|ico)$/,
+        type: 'asset/resource'
       },{
+        //Обработка картинок
+        test: /\.(jpg|png)$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[path]/[name].[ext]'
+      }},{
+        // Оптимизация всех изображений
+        loader: "webp-loader",
+        options: {
+          quality: 50
+      }}]},{
         //Применение babel к js
         test: /\.js$/,
         exclude: /node_modules/,
@@ -57,7 +62,6 @@ module.exports = {
   ]},
   plugins: [// Настройка плагина HtmlWebpackPlugin
     new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: './index.html',
-    })]
+      favicon: path.resolve(__dirname,'src/favicon.png'),
+      template: path.resolve(__dirname,'src/index.html')})]
 };

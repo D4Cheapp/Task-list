@@ -10,7 +10,6 @@ body
   font-family: 'Roboto', sans-serif
   background: $elephant
 
-  margin: 0
   padding-top: 15vw
   min-height: 100vh
 
@@ -115,15 +114,36 @@ div.Todo-List__Tasks
 
 
 div.Todo-List__Tasks__Task
+  position: relative
   color: $radical-red
   background: $bismark
 
   padding: 10px
   border-radius: 10px
 
-  &::after
-    content: ""
-    opacity: 1
-    width: 20px
-    height: 20px
+  &:hover
+    button.Todo-List__Tasks__Task__Delete-Task
+      opacity: 1
+
+label.Todo-List__Tasks__Task__Label
+  margin-left: 15px
+
+button.Todo-List__Tasks__Task__Delete-Task
+  position: absolute
+  right: 10px
+  top: 10px
+  opacity: 0
+
+  border: none
+  padding: 0
+
+  height: 1vw
+  width: 1vw
+
+  background-color: transparent
+  background-image: url("./cross-mark.svg")
+  background-size: contain
+  transition: .2s
+
+
 
