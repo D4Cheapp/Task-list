@@ -4,9 +4,8 @@ import "normalize.css";
 
 //Подключение скриптов
 import "./js/taskAdd.js";
+import "./js/filtersAndButtons.js";
 import "./js/localStorageReading.js";
-import "./js/buttons.js";
-import "./js/exportedFunction";
 
 //Подключение иконок и картинок
 import "./favicon.svg";

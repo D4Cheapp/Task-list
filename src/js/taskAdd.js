@@ -1,13 +1,8 @@
 import {storage} from "./localStorageReading";
-import {createTask, refreshTaskCounter} from "./exportedFunction";
+import {createTask, filteringTasks} from "./exportedFunction";
 
-//Получение ссылок на поле ввода и список задач
+//Получение ссылок на поле ввода
 const inputTodos = document.getElementById("Todo-List__Input");
-const taskContainer = document.getElementById("Todo-List__Tasks");
-
-//Счетчик задач в списке
-const taskCountText = document.getElementById("Tasks-Counter");
-taskCountText.innerHTML = document.getElementsByClassName("Todo-List__Tasks__Task").length + " tasks left";
 
 //Слушатель нажатия кнопок в поле ввода
 inputTodos.addEventListener("keypress", (e) => {
@@ -19,12 +14,7 @@ inputTodos.addEventListener("keypress", (e) => {
         let taskText = inputTodos.value.toString();
         inputTodos.value = "";
 
-        //Создание элемента задачи для добавления в список
-        let task = createTask(taskText,false,
-            document.getElementsByClassName("Todo-List__Tasks__Task").length.toString());
-
-        //Изменение счетчика задач и добавление задачи в список
-        taskContainer.append(task);
+        //Добавление задачи в локальное хранилище
         let taskJson = {
             title: taskText.toString(),
             completed: false,
@@ -32,6 +22,14 @@ inputTodos.addEventListener("keypress", (e) => {
         }
         storage.push(taskJson);
         localStorage.setItem("todoList", JSON.stringify(storage));
-        refreshTaskCounter();
+
+        //Создание элемента задачи для добавления в список
+        createTask(taskJson);
+        filteringTasks();
     }
 })
+
+
+
+
+

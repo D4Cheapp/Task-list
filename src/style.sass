@@ -63,10 +63,13 @@ footer.Todo-List__Footer-Buttons
   text-align: center
   color: $radical-red
 
-  label.Todo-List__Footer-Buttons__Label
+  a.Todo-List__Footer-Buttons__Link
     display: inline-block
     padding-block: 3px
     width: 8vw
+
+    text-decoration: none
+    color: $radical-red
 
     user-select: none
     cursor: pointer
@@ -80,11 +83,11 @@ footer.Todo-List__Footer-Buttons
     z-index: -1
     position: absolute
 
-    &:checked + label.Todo-List__Footer-Buttons__Label
+    &:checked + a.Todo-List__Footer-Buttons__Link
       color: $dark-tan
       border: 1px $dark-tan solid
 
-    &:active + label.Todo-List__Footer-Buttons__Label
+    &:active + a.Todo-List__Footer-Buttons__Link
       color: $dark-tan
       border: 1px $dark-tan solid
 
@@ -94,7 +97,7 @@ div.Todo-List__Footer-Buttons__Tasks-Type
   display: inline-flex
   justify-content: space-around
 
-  label.Todo-List__Footer-Buttons__Label
+  a.Todo-List__Footer-Buttons__Link
     width: 6vw
 
 
@@ -115,6 +118,7 @@ div.Todo-List__Tasks
 
 div.Todo-List__Tasks__Task
   position: relative
+  display: inline-flex
   color: $radical-red
   background: $bismark
 
@@ -125,25 +129,27 @@ div.Todo-List__Tasks__Task
     button.Todo-List__Tasks__Task__Delete-Task
       opacity: 1
 
-label.Todo-List__Tasks__Task__Label
+p.Todo-List__Tasks__Task__Task-Title
   margin-left: 15px
+  margin-block: 0
 
 button.Todo-List__Tasks__Task__Delete-Task
   position: absolute
-  right: 10px
-  top: 10px
+  right: 1em
+  top: .65em
   opacity: 0
 
   border: none
   padding: 0
 
-  height: 1vw
-  width: 1vw
+  height: 1em
+  width: 1em
 
   background-color: transparent
   background-image: url("./cross-mark.svg")
   background-size: contain
   transition: .2s
+
 
 
 
