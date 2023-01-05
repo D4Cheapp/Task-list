@@ -44,11 +44,19 @@ module.exports = {
         use: [{
           loader: 'file-loader',
           options: {
-            name: '[path]/[name].[ext]'
-      }}]}
+            name: '[name].[ext]'
+      }}]},{
+        //Применение babel к js
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+      }}},
   ]},
   plugins: [// Настройка плагина HtmlWebpackPlugin
     new HtmlWebpackPlugin({
-      favicon: path.resolve(__dirname,'src/favicon.svg'),
+      favicon: path.resolve(__dirname,'src/favicon.ico'),
       template: path.resolve(__dirname,'src/index.html')})]
 };

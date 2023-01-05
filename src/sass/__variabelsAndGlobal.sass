@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap')
+
+$cosmic: #673A65
+$strikemaster: #A16195
+$bon-jour: #E0DEDF
+
+body
+  font-family: 'Roboto', sans-serif
+  background: $bon-jour
+
+  min-height: 100vh
+
+  display: flex
+  overflow: hidden
+  justify-content: center
+  align-items: center
+
+  ::-webkit-scrollbar
+    width: 3vh
+    background: transparent
+
+  ::-webkit-scrollbar-thumb
+    background: $cosmic
+    border: 1vh $bon-jour solid
+
+    border-radius: 1vw
+    @media (max-width: 1500px)
+      border-radius: 50px
+
+
+section.Todo-List
+  width: 50vw
+  @media (max-width: 1024px)
+    width: 80vw
+

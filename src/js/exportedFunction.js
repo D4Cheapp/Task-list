@@ -14,10 +14,13 @@ export function refreshTaskCounter(){
 export function filteringTasks(){
     taskContainer.innerHTML = ""
     let filter = [];
+    for (let i of document.getElementsByClassName("Todo-List__Footer-Buttons__Link")) {
+        i.classList.remove("Active-Link");
+    }
     switch (window.location.hash){
-        case "": filter = [true,false]; break;
-        case "#/Active": filter = [false]; break;
-        case "#/Completed": filter = [true]; break;
+        case "": filter = [true,false]; document.getElementById("All-Tasks").classList.add("Active-Link"); break;
+        case "#/Active": filter = [false]; document.getElementById("Active-Tasks").classList.add("Active-Link"); break;
+        case "#/Completed": filter = [true]; document.getElementById("Completed-Tasks").classList.add("Active-Link"); break;
     }
     for (let i of storage){
         if (filter.includes(i.completed))
@@ -43,7 +46,7 @@ export function removeTaskInMemory(dataId){
 //Функция создания задачи
 export function createTask(element) {
     //Создание родительского div контейнера
-    let task = document.createElement("div");
+    let task = document.createElement("label");
     task.classList.add("Todo-List__Tasks__Task");
     task.setAttribute("data-id", element.id);
 
@@ -53,15 +56,15 @@ export function createTask(element) {
     taskTitle.classList.add("Todo-List__Tasks__Task__Task-Title");
     task.insertAdjacentElement("afterbegin", taskTitle);
 
-    //Чекбокс
+    //Кастомный чекбокс
     let customCheckBox = document.createElement("div");
     customCheckBox.setAttribute("for","check")
+    customCheckBox.classList.add("Todo-List__Tasks__Task__Custom-Checkbox")
     task.insertAdjacentElement("afterbegin", customCheckBox);
 
     //Кнопка завершения задачи
     let completeInput = document.createElement("input");
     completeInput.classList.add("Todo-List__Tasks__Task__Toggle-Check");
-    completeInput.setAttribute("for","check");
     completeInput.type = "checkBox";
 
     completeInput.addEventListener("click", () => {

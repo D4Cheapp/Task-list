@@ -1,0 +1,89 @@
+div.Todo-List__Tasks
+  margin-top: 2vh
+  display: flex
+  flex-direction: column
+  padding-left: 3vh
+  gap: 1vh
+
+  overflow-x: hidden
+  overflow-y: scroll
+  max-height: 35vh
+  @media (max-width: 1024px)
+    max-height: 45vh
+
+input.Todo-List__Tasks__Task__Toggle-Check
+  position: absolute
+  opacity: 0
+
+  &:checked+div.Todo-List__Tasks__Task__Custom-Checkbox::before
+    opacity: 1
+
+
+div.Todo-List__Tasks__Task__Custom-Checkbox
+  position: relative
+  cursor: pointer
+  width: 1em
+  height: 1em
+  border: 2px $cosmic solid
+  border-radius: 5px
+
+  &::before
+    position: absolute
+    content: ''
+    rotate: 45deg
+    top: 12%
+    left: 35%
+    width: .2em
+    height: .55em
+    border-bottom: 2px $cosmic solid
+    border-right: 2px $cosmic solid
+    opacity: 0
+    transition: .2s
+
+
+label.Todo-List__Tasks__Task
+  position: relative
+  display: inline-flex
+  align-items: center
+  color: $bon-jour
+  background: $strikemaster
+
+  padding: 1.5vh
+  border-radius: .8vw
+  @media (max-width: 1024px)
+    border-radius: 10px
+
+  &:hover
+    button.Todo-List__Tasks__Task__Delete-Task
+      opacity: 1
+
+label.Completed
+  p.Todo-List__Tasks__Task__Task-Title
+    text-decoration: line-through
+    opacity: .5
+
+p.Todo-List__Tasks__Task__Task-Title
+  margin-left: 15px
+  margin-block: 0
+  font-size: 2.2vh
+  transition: .3s
+
+button.Todo-List__Tasks__Task__Delete-Task
+  position: absolute
+  cursor: pointer
+  right: 1.5vh
+  top: 50%
+  transform: translate(0,-50%)
+  opacity: 0
+
+  border: none
+  padding: 0
+
+  height: 1em
+  width: 1em
+
+  background-image: url("cross-mark.svg")
+  background-color: transparent
+
+  background-size: contain
+  transition: .2s

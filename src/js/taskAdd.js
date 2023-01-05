@@ -28,8 +28,3 @@ inputTodos.addEventListener("keypress", (e) => {
         filteringTasks();
     }
 })
-
-
-
-
-
