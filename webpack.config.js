@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const {t} = require("@babel/core/lib/vendor/import-meta-resolve");
 
 module.exports = {
   //Режим проекта и точка входа

@@ -13,7 +13,7 @@ footer.Todo-List__Footer-Buttons
   color: $strikemaster
   font-weight: 500
 
-  a.Todo-List__Footer-Buttons__Link, button.Todo-List__Footer-Buttons__Input
+  button.Todo-List__Footer-Buttons__Link, button.Todo-List__Footer-Buttons__Input
     padding-block: .2vw
 
     text-decoration: none
@@ -39,7 +39,7 @@ footer.Todo-List__Footer-Buttons
     font-weight: 500
     padding-inline: 0
 
-  a.Todo-List__Footer-Buttons__Link.Active-Link
+  button.Todo-List__Footer-Buttons__Link.Active-Link
     color: $cosmic
     font-weight: 700
     border: 3px $cosmic solid
@@ -51,7 +51,8 @@ div.Todo-List__Footer-Buttons__Tasks-Type
   display: inline-flex
   justify-content: space-around
 
-  a.Todo-List__Footer-Buttons__Link
+  button.Todo-List__Footer-Buttons__Link
+    background: transparent
     width: 6vw
 
 
@@ -84,12 +85,12 @@ p.Todo-List__Footer-Buttons__Tasks-Count
     justify-content: space-between
     grid-column: 1/6
 
-    a.Todo-List__Footer-Buttons__Link
+    button.Todo-List__Footer-Buttons__Link
       width: 25%
 
 @media (max-width: 600px)
   footer.Todo-List__Footer-Buttons
     font-size: .8em
 
-    div.Todo-List__Footer-Buttons__Tasks-Type>a.Todo-List__Footer-Buttons__Link
+    div.Todo-List__Footer-Buttons__Tasks-Type>button.Todo-List__Footer-Buttons__Link
         width: 30%

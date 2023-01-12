@@ -1,4 +1,4 @@
-import {createTask} from "./exportedFunction";
+import {createTask, filteringTasks} from "./exportedFunction"
 
 //Переменная в которой будет записано локальное хранилище
 export let storage = []
@@ -11,6 +11,7 @@ if (localStorage.todoList === undefined){
 else {
     storage = JSON.parse(localStorage.getItem("todoList"))
     for (let i of storage){
-        createTask(i);
+        createTask(i)
     }
+    filteringTasks()
 }

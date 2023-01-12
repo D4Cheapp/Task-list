@@ -14,12 +14,13 @@ div.Todo-List__Tasks
 input.Todo-List__Tasks__Task__Toggle-Check
   position: absolute
   opacity: 0
+  z-index: -1
 
-  &:checked+div.Todo-List__Tasks__Task__Custom-Checkbox::before
+div.Completed>label.Todo-List__Tasks__Task__Custom-Checkbox::before
     opacity: 1
 
 
-div.Todo-List__Tasks__Task__Custom-Checkbox
+label.Todo-List__Tasks__Task__Custom-Checkbox
   position: relative
   cursor: pointer
   width: 1em
@@ -41,32 +42,52 @@ div.Todo-List__Tasks__Task__Custom-Checkbox
     transition: .2s
 
 
-label.Todo-List__Tasks__Task
+div.Todo-List__Tasks__Task
   position: relative
   display: inline-flex
   align-items: center
   color: $bon-jour
   background: $strikemaster
+  height: 1.5vw
 
   padding: 1.5vh
   border-radius: .8vw
   @media (max-width: 1024px)
+    height: 3vw
     border-radius: 10px
 
   &:hover
     button.Todo-List__Tasks__Task__Delete-Task
       opacity: 1
 
-label.Completed
-  p.Todo-List__Tasks__Task__Task-Title
+div.Completed
+  input.Todo-List__Tasks__Task__Task-Title
     text-decoration: line-through
     opacity: .5
 
-p.Todo-List__Tasks__Task__Task-Title
+input.Todo-List__Tasks__Task__Task-Title
+  background: transparent
+  border: 1px transparent solid
+  outline: none
+  user-select: none
+  cursor: default
+
+  padding: .8vh
   margin-left: 15px
   margin-block: 0
+
+  height: 100%
+  width: 100%
+
+  color: $bon-jour
   font-size: 2.2vh
   transition: .3s
+
+  &.Focus
+      outline: none
+      cursor: text
+      border: 1px $cosmic solid
+      border-radius: 5px
 
 button.Todo-List__Tasks__Task__Delete-Task
   position: absolute

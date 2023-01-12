@@ -1,32 +1,43 @@
-import {storage} from "./localStorageReading";
+import {storage} from "./localStorageReading"
 
-let taskContainer = document.getElementById("Todo-List__Tasks");
+let taskContainer = document.getElementById("Todo-List__Tasks")
 
 //Обновление счетчика задач
 export function refreshTaskCounter(){
-    document.getElementById("Tasks-Counter").innerHTML =
-        document.querySelectorAll(".Todo-List__Tasks__Task").length
-        + " tasks left";
-}
+    let count = 0
 
+    for (let i of storage){
+        if (!i.completed) count ++
+    }
+
+    document.getElementById("Tasks-Counter").innerHTML =
+        count + " tasks left"
+}
 
 //Функция сортировки задач
 export function filteringTasks(){
-    taskContainer.innerHTML = ""
-    let filter = [];
+    let filter = []
     for (let i of document.getElementsByClassName("Todo-List__Footer-Buttons__Link")) {
-        i.classList.remove("Active-Link");
+        i.classList.remove("Active-Link")
     }
-    switch (window.location.hash){
+
+    let link = document.URL.split('/')
+
+    switch (link[link.length-1]){
         case "": filter = [true,false]; document.getElementById("All-Tasks").classList.add("Active-Link"); break;
-        case "#/Active": filter = [false]; document.getElementById("Active-Tasks").classList.add("Active-Link"); break;
-        case "#/Completed": filter = [true]; document.getElementById("Completed-Tasks").classList.add("Active-Link"); break;
+        case "Active": filter = [false]; document.getElementById("Active-Tasks").classList.add("Active-Link"); break;
+        case "Completed": filter = [true]; document.getElementById("Completed-Tasks").classList.add("Active-Link"); break;
     }
-    for (let i of storage){
-        if (filter.includes(i.completed))
-            createTask(i)
+
+    let tasksToShow = taskContainer.querySelectorAll('div.Todo-List__Tasks__Task')
+    for (let task of tasksToShow){
+        if (filter.includes(task.classList.contains('Completed'))){
+            task.style.display = 'inline-flex'
+        }
+        else{
+            task.style.display = 'none'
+        }
     }
-    refreshTaskCounter()
 }
 
 
@@ -35,9 +46,9 @@ export function removeTaskInMemory(dataId){
     for (let i = 0; i < storage.length; i++) {
         if (storage[i].id === +dataId){
             storage.splice(i,1)
-            localStorage.setItem("todoList", JSON.stringify(storage));
+            localStorage.setItem("todoList", JSON.stringify(storage))
             refreshTaskCounter()
-            break;
+            break
         }
     }
 }
@@ -46,52 +57,99 @@ export function removeTaskInMemory(dataId){
 //Функция создания задачи
 export function createTask(element) {
     //Создание родительского div контейнера
-    let task = document.createElement("label");
-    task.classList.add("Todo-List__Tasks__Task");
-    task.setAttribute("data-id", element.id);
-
-    //Текст задачи
-    let taskTitle = document.createElement("p");
-    taskTitle.innerHTML = element.title;
-    taskTitle.classList.add("Todo-List__Tasks__Task__Task-Title");
-    task.insertAdjacentElement("afterbegin", taskTitle);
+    let task = document.createElement("div")
+    task.style.display = 'inline-flex'
+    task.classList.add("Todo-List__Tasks__Task")
+    task.setAttribute("data-id", element.id)
 
     //Кастомный чекбокс
-    let customCheckBox = document.createElement("div");
-    customCheckBox.setAttribute("for","check")
+    let customCheckBox = document.createElement("label")
     customCheckBox.classList.add("Todo-List__Tasks__Task__Custom-Checkbox")
-    task.insertAdjacentElement("afterbegin", customCheckBox);
 
-    //Кнопка завершения задачи
-    let completeInput = document.createElement("input");
-    completeInput.classList.add("Todo-List__Tasks__Task__Toggle-Check");
-    completeInput.type = "checkBox";
+        //Инпут чекбокса
+        let completeInput = document.createElement("input")
+        completeInput.classList.add("Todo-List__Tasks__Task__Toggle-Check")
+        completeInput.type = "checkBox"
 
-    completeInput.addEventListener("click", () => {
-        task.classList.toggle("Completed");
-        for (let i = 0; i < storage.length; i++) {
-            if (storage[i].id === element.id) {
-                storage[i].completed = !storage[i].completed;
-                localStorage.setItem("todoList", JSON.stringify(storage));
+        //Изменеие состояния в локальной памяти
+        completeInput.addEventListener("click", () => {
+            task.classList.toggle("Completed")
+            for (let i = 0; i < storage.length; i++) {
+                if (storage[i].id === element.id) {
+                    storage[i].completed = !storage[i].completed
+                    localStorage.setItem("todoList", JSON.stringify(storage))
+                }
             }
-        }
-    });
+            filteringTasks()
+            refreshTaskCounter()
+        })
 
-    if (element.completed) {
-        task.classList.add("Completed");
-        completeInput.setAttribute("checked", "checked");
-    }
-    task.insertAdjacentElement("afterbegin", completeInput);
+        if (element.completed) {
+            task.classList.add("Completed")
+        }
+
+    //Вставка инпута в лэйбл и лэйбла в контейнер
+    customCheckBox.insertAdjacentElement("afterbegin", completeInput)
+    task.insertAdjacentElement("afterbegin", customCheckBox)
 
     //Кнопка удаления задачи
-    let deleteInput = document.createElement("button");
-    deleteInput.classList.add("Todo-List__Tasks__Task__Delete-Task");
+    let deleteInput = document.createElement("button")
+    deleteInput.classList.add("Todo-List__Tasks__Task__Delete-Task")
     deleteInput.addEventListener("click", () => {
-        task.remove();
-        removeTaskInMemory(element.id);
+        task.remove()
+        removeTaskInMemory(element.id)
     })
-    task.insertAdjacentElement("beforeend", deleteInput);
 
-    taskContainer.append(task);
-    refreshTaskCounter();
+
+    //Текст задачи
+    let taskTitle = document.createElement("input")
+    taskTitle.value = element.title
+    taskTitle.setAttribute('readonly','true')
+    taskTitle.classList.add("Todo-List__Tasks__Task__Task-Title")
+    taskTitle.addEventListener('dblclick',()=>{
+        editTask(element.id, taskTitle,deleteInput)
+    })
+
+    task.insertAdjacentElement("beforeend", taskTitle)
+    task.insertAdjacentElement("beforeend", deleteInput)
+
+    taskContainer.append(task)
+    refreshTaskCounter()
+}
+
+//Редактирование задачи
+function editTask(id,textContainer,deleteButton){
+    window.getSelection().removeAllRanges()
+    textContainer.selectionStart = textContainer.value.length
+    deleteButton.style.opacity = '0'
+
+    textContainer.removeAttribute('readonly')
+    textContainer.classList.add('Focus')
+
+
+    const disableFocus = (event,func) => {
+        for (let task of storage) {
+            if (task.id === id){
+                task.title = textContainer.value
+                localStorage.setItem("todoList", JSON.stringify(storage))
+                break
+            }
+        }
+
+        textContainer.setAttribute('readonly','true')
+        textContainer.classList.remove('Focus')
+
+        deleteButton.removeAttribute('style')
+        textContainer.removeEventListener(event, func)
+    }
+    textContainer.addEventListener('focusout', ()=>{disableFocus('focusout', disableFocus)})
+
+    const enterCheck = (e)=>{
+        if (e.key === 'Enter'){
+            disableFocus('keypress', enterCheck)
+        }
+    }
+    textContainer.addEventListener('keypress', enterCheck)
+
+
 }

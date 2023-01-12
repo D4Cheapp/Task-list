@@ -1,30 +1,39 @@
-import {storage} from "./localStorageReading";
-import {createTask, filteringTasks} from "./exportedFunction";
+import {storage} from "./localStorageReading"
+import {createTask, filteringTasks} from "./exportedFunction"
 
 //Получение ссылок на поле ввода
-const inputTodos = document.getElementById("Todo-List__Input");
+const inputTodos = document.getElementById("Todo-List__Input")
 
 //Слушатель нажатия кнопок в поле ввода
 inputTodos.addEventListener("keypress", (e) => {
 
     //Создание задания для добавления в список по нажатию кнопки enter
-    if(e.key === "Enter" && inputTodos.value !== ""){
+    if(e.key === "Enter" && inputTodos.value !== null){
 
-        //Запись поля ввода в переменную и его очистка
-        let taskText = inputTodos.value.toString();
-        inputTodos.value = "";
+        //Проверка задачи на валидность
+        const spaces = inputTodos.value.match(/\s/g)
+        if (inputTodos.value !== "" && ((spaces === null ? 0 : spaces.length) !== inputTodos.value.length)){
 
-        //Добавление задачи в локальное хранилище
-        let taskJson = {
-            title: taskText.toString(),
-            completed: false,
-            id: Date.now()
+            //Запись поля ввода в переменную и его очистка
+            let taskText = inputTodos.value.toString()
+            inputTodos.value = ""
+
+            //Добавление задачи в локальное хранилище
+            let taskJson = {
+                title: taskText.toString(),
+                completed: false,
+                id: Date.now()
+            }
+            storage.push(taskJson)
+            localStorage.setItem("todoList", JSON.stringify(storage))
+
+            //Создание элемента задачи для добавления в список
+            createTask(taskJson)
+            filteringTasks()
         }
-        storage.push(taskJson);
-        localStorage.setItem("todoList", JSON.stringify(storage));
-
-        //Создание элемента задачи для добавления в список
-        createTask(taskJson);
-        filteringTasks();
+        else {
+            inputTodos.value = ''
+        }
     }
+
 })
