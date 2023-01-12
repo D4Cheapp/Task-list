@@ -22,9 +22,8 @@ export function filteringTasks(){
     }
 
     let link = document.URL.split('/')
-
     switch (link[link.length-1]){
-        case "": filter = [true,false]; document.getElementById("All-Tasks").classList.add("Active-Link"); break;
+        case "#": filter = [true,false]; document.getElementById("All-Tasks").classList.add("Active-Link"); break;
         case "Active": filter = [false]; document.getElementById("Active-Tasks").classList.add("Active-Link"); break;
         case "Completed": filter = [true]; document.getElementById("Completed-Tasks").classList.add("Active-Link"); break;
     }
