@@ -50,6 +50,7 @@ div.Todo-List__Tasks__Task
   background: $strikemaster
   height: 1.5vw
 
+  font-size: 2.2vh
   padding: 1.5vh
   border-radius: .8vw
   @media (max-width: 1024px)
@@ -61,26 +62,37 @@ div.Todo-List__Tasks__Task
       opacity: 1
 
 div.Completed
-  input.Todo-List__Tasks__Task__Task-Title
+  textarea.Todo-List__Tasks__Task__Task-Title
     text-decoration: line-through
     opacity: .5
 
-input.Todo-List__Tasks__Task__Task-Title
+div.Edited
+  textarea.Todo-List__Tasks__Task__Task-Title
+    text-decoration: none
+    opacity: 1
+
+textarea.Todo-List__Tasks__Task__Task-Title
   background: transparent
   border: 1px transparent solid
   outline: none
   user-select: none
   cursor: default
 
-  padding: .8vh
+  resize: none
+  overflow: hidden
+  word-break: break-word
+
+  padding: 0
   margin-left: 15px
   margin-block: 0
 
-  height: 100%
-  width: 100%
+  height: 1em
+  width: 85%
+  @media (max-width: 1024px)
+    width: 77%
+  max-width: 100%
 
   color: $bon-jour
-  font-size: 2.2vh
   transition: .3s
 
   &.Focus

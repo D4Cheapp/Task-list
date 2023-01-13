@@ -70,9 +70,10 @@ export function createTask(element) {
         completeInput.classList.add("Todo-List__Tasks__Task__Toggle-Check")
         completeInput.type = "checkBox"
 
-        //Изменеие состояния в локальной памяти
+        //Изменение состояния в локальной памяти
         completeInput.addEventListener("click", () => {
             task.classList.toggle("Completed")
+            completeInput.setAttribute('check', 'check')
             for (let i = 0; i < storage.length; i++) {
                 if (storage[i].id === element.id) {
                     storage[i].completed = !storage[i].completed
@@ -101,40 +102,54 @@ export function createTask(element) {
 
 
     //Текст задачи
-    let taskTitle = document.createElement("input")
-    taskTitle.value = element.title
+    let taskTitle = document.createElement("textarea")
+
     taskTitle.setAttribute('readonly','true')
     taskTitle.classList.add("Todo-List__Tasks__Task__Task-Title")
     taskTitle.addEventListener('dblclick',()=>{
-        editTask(element.id, taskTitle,deleteInput)
+        editTask(element.id, taskTitle,deleteInput,task)
     })
+    taskTitle.value = element.title
 
     task.insertAdjacentElement("beforeend", taskTitle)
     task.insertAdjacentElement("beforeend", deleteInput)
 
     taskContainer.append(task)
+
+    resizeTask(taskTitle,task)
+    window.addEventListener('resize', ()=>resizeTask(taskTitle,task))
     refreshTaskCounter()
 }
 
 //Редактирование задачи
-function editTask(id,textContainer,deleteButton){
+function editTask(id,textContainer,deleteButton,taskContainer){
     window.getSelection().removeAllRanges()
     textContainer.selectionStart = textContainer.value.length
     deleteButton.style.opacity = '0'
 
+    taskContainer.classList.add('Edited')
     textContainer.removeAttribute('readonly')
     textContainer.classList.add('Focus')
-
 
     const disableFocus = (event,func) => {
         for (let task of storage) {
             if (task.id === id){
-                task.title = textContainer.value
-                localStorage.setItem("todoList", JSON.stringify(storage))
-                break
+                if (textContainer.value === '' ||
+                    textContainer.value.length === (textContainer.value.match(/\s/g) || []).length){
+                    deleteButton.click()
+                    break
+                }
+                else {
+                    if (textContainer.value.startsWith(' ')) textContainer.value = textContainer.value.trim()
+                    resizeTask(textContainer,taskContainer)
+                    task.title = textContainer.value
+                    localStorage.setItem("todoList", JSON.stringify(storage))
+                    break
+                }
             }
         }
 
+        taskContainer.classList.remove('Edited')
         textContainer.setAttribute('readonly','true')
         textContainer.classList.remove('Focus')
 
@@ -149,6 +164,17 @@ function editTask(id,textContainer,deleteButton){
         }
     }
     textContainer.addEventListener('keypress', enterCheck)
+}
 
+//Функция для изменения размера задачи в зависимости от количества текста
+function resizeTask(text,task){
+    if (text.scrollHeight > getComputedStyle(task).fontSize.split('px')[0]*2){
+        task.style.height = text.scrollHeight+'px'
+
+        text.style.height = 'auto'
+        text.style.height = text.scrollHeight+'px'
+    }else {
+        text.style.height = '1em'
+    }
 
 }

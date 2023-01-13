@@ -1,4 +1,4 @@
-import {createTask, filteringTasks} from "./exportedFunction"
+import {createTask, filteringTasks, resizeAllTask} from "./exportedFunction"
 
 //Переменная в которой будет записано локальное хранилище
 export let storage = []
