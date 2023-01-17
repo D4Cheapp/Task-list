@@ -1,25 +1,25 @@
-import {storage} from "./localStorageReading"
-import {createTask, filteringTasks} from "./exportedFunction"
+import {storage} from './localStorage'
+import {Task} from './task';
+import {filteringTasks} from "./filtersAndButtons";
 
 //Получение ссылок на поле ввода
-const inputTodos = document.getElementById("Todo-List__Input")
+const inputTodos = document.getElementById('Todo-List__Input')
 
 //Слушатель нажатия кнопок в поле ввода
-inputTodos.addEventListener("keypress", (e) => {
+inputTodos.addEventListener('keypress', (e) => {
 
     //Создание задания для добавления в список по нажатию кнопки enter
-    if(e.key === "Enter" && inputTodos.value !== null){
+    if(e.key === 'Enter' && inputTodos.value !== null){
 
         //Проверка задачи на валидность
-        if (inputTodos.value !== "" &&
+        if (inputTodos.value !== '' &&
             (((inputTodos.value.match(/\s/g) || []).length) !== inputTodos.value.length)){
 
-            if (inputTodos.value.startsWith(' ')) inputTodos.value = inputTodos.value.trim()
-
-
             //Запись поля ввода в переменную и его очистка
-            let taskText = inputTodos.value.toString()
-            inputTodos.value = ""
+            let taskText = ''
+            inputTodos.value.toString().split(' ').map(i => i === '' ? '' : taskText += i + ' ')
+            taskText.trim()
+            inputTodos.value = ''
 
             //Добавление задачи в локальное хранилище
             let taskJson = {
@@ -28,10 +28,10 @@ inputTodos.addEventListener("keypress", (e) => {
                 id: Date.now()
             }
             storage.push(taskJson)
-            localStorage.setItem("todoList", JSON.stringify(storage))
+            localStorage.setItem('todoList', JSON.stringify(storage))
 
             //Создание элемента задачи для добавления в список
-            createTask(taskJson)
+            new Task(taskJson).createElement()
             filteringTasks()
         }
         else {
@@ -40,3 +40,17 @@ inputTodos.addEventListener("keypress", (e) => {
     }
 
 })
+
+
+//Обновление счетчика задач
+export function refreshTaskCounter(){
+    let count = 0
+
+    for (let i of storage){
+        if (!i.completed) count ++
+    }
+
+    document.getElementById('Tasks-Counter').innerHTML =
+        count + ' tasks left'
+}
+

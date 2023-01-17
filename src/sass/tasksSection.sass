@@ -48,6 +48,7 @@ div.Todo-List__Tasks__Task
   align-items: center
   color: $bon-jour
   background: $strikemaster
+  border: 2px transparent solid
   height: 1.5vw
 
   font-size: 2.2vh
@@ -67,13 +68,15 @@ div.Completed
     opacity: .5
 
 div.Edited
+  border: 2px $cosmic solid
   textarea.Todo-List__Tasks__Task__Task-Title
+    margin-left: calc(1em + 19px)
     text-decoration: none
     opacity: 1
 
 textarea.Todo-List__Tasks__Task__Task-Title
   background: transparent
-  border: 1px transparent solid
+  border: none
   outline: none
   user-select: none
   cursor: default
@@ -86,19 +89,18 @@ textarea.Todo-List__Tasks__Task__Task-Title
   margin-left: 15px
   margin-block: 0
 
-  height: 1em
+  line-height: 1em
   width: 85%
   @media (max-width: 1024px)
     width: 77%
   max-width: 100%
 
   color: $bon-jour
-  transition: .3s
+  transition: width, height .3s
 
   &.Focus
       outline: none
       cursor: text
-      border: 1px $cosmic solid
       border-radius: 5px
 
 button.Todo-List__Tasks__Task__Delete-Task
