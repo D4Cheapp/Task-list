@@ -1,14 +1,20 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
-const {t} = require("@babel/core/lib/vendor/import-meta-resolve");
 
 module.exports = {
   //Режим проекта и точка входа
   mode: 'development',
-  entry: path.resolve(__dirname,'src/main.js'),
+  entry: './src/main.js',
   //Настройка сервера
   devServer: {
     watchFiles: path.resolve(__dirname,"src/index.html"),
+    static: {
+      directory: path.join(__dirname, 'src'),
+      staticOptions: {
+        redirect: true,
+      },
+    },
+    historyApiFallback: true,
     port: 3000,
     hot: true,
   },

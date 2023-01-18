@@ -1,12 +1,17 @@
 import {removeTaskInMemory} from './localStorage';
 
 //Смена страницы
-document.getElementById('All-Tasks').addEventListener('click',
-    ()=>{history.pushState(null,null,'/Todo-List/#');filteringTasks()})
-document.getElementById('Active-Tasks').addEventListener('click',
-    ()=>{history.pushState(null,null,'/Todo-List/#Active');filteringTasks()})
-document.getElementById('Completed-Tasks').addEventListener('click',
-    ()=>{history.pushState(null,null,'/Todo-List/#Completed');filteringTasks()})
+document.getElementById('All-Tasks').addEventListener('click', ()=>{urlReplace('#')})
+document.getElementById('Active-Tasks').addEventListener('click',()=>{urlReplace('#Active')})
+document.getElementById('Completed-Tasks').addEventListener('click',()=>{urlReplace('#Completed')})
+
+//Функция для смены url страницы
+function urlReplace(filter){
+    let link = document.URL.split('/');
+    link[link.length-1] = filter;
+    window.location.href = link.join('/') ;
+    filteringTasks()
+}
 
 //Кнопка очистки выполненных заданий
 document.getElementById('ClearCompleted').addEventListener('click',clearComplete)
@@ -31,9 +36,9 @@ export function filteringTasks(){
 
     let link = document.URL.split('/')
     switch (link[link.length-1]){
-        case '#': filter = [true,false]; document.getElementById('All-Tasks').classList.add('Active-Link'); break;
         case '#Active': filter = [false]; document.getElementById('Active-Tasks').classList.add('Active-Link'); break;
         case '#Completed': filter = [true]; document.getElementById('Completed-Tasks').classList.add('Active-Link'); break;
+        default: filter = [true,false]; document.getElementById('All-Tasks').classList.add('Active-Link'); break;
     }
 
     let tasksToShow = taskContainer.querySelectorAll('div.Todo-List__Tasks__Task')
