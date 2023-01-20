@@ -8,7 +8,7 @@ export let storage = []
 //Считывание локальной памяти
 function storageReading(){
     //Если локальное хранилище пустое, то в нем создается пустой массив
-    if (localStorage.todoList === undefined){
+    if (!localStorage.getItem('todoList')){
         localStorage.setItem('todoList','[]')
     }
     //Иначе из него считываются задачи
@@ -24,13 +24,11 @@ storageReading()
 
 //Функция удаления задачи
 export function removeTaskInMemory(dataId){
-    for (let i = 0; i < storage.length; i++) {
-        if (storage[i].id === +dataId){
-            storage.splice(i,1)
+    storage.filter(function (element, index){
+        if (element.id === dataId){
+            storage.splice(index,1)
             localStorage.setItem('todoList', JSON.stringify(storage))
             refreshTaskCounter()
-            break
-        }
-    }
+    }})
 }
 

@@ -9,13 +9,13 @@
   <meta name="description" content="Сайт для сохранения списка дел">
 </head>
 <body>
-  <section class="Todo-List">
+  <div class="Todo-List">
       <header class="Todo-List__Header">
           <h1 class="Todo-List__Header__Title">Todo List</h1>
-          <input class="Todo-List__Header__Input" id="Todo-List__Input" type="text" placeholder="Whats need to be done?">
+          <input class="Todo-List__Header__Input" id="User-Input" type="text" placeholder="Whats need to be done?">
       </header>
 
-      <div class="Todo-List__Tasks" id="Todo-List__Tasks"></div>
+      <section class="Todo-List__Tasks" id="Task-Section"></section>
 
       <footer class="Todo-List__Footer-Buttons">
           <p class="Todo-List__Footer-Buttons__Tasks-Count" id="Tasks-Counter">0 tasks left</p>
@@ -26,8 +26,8 @@
               <button class="Todo-List__Footer-Buttons__Link" id="Completed-Tasks">Completed</button>
           </div>
 
-          <button class="Todo-List__Footer-Buttons__Input" id="ClearCompleted">Clear completed</button>
+          <button class="Todo-List__Footer-Buttons__Input" id="Clear-Completed">Clear completed</button>
       </footer>
-  </section>
+  </div>
 </body>
 </html>

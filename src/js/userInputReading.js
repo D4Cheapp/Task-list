@@ -3,18 +3,14 @@ import {Task} from './task';
 import {filteringTasks} from "./filtersAndButtons";
 
 //Получение ссылок на поле ввода
-const inputTodos = document.getElementById('Todo-List__Input')
+const inputTodos = document.getElementById('User-Input')
 
 //Слушатель нажатия кнопок в поле ввода
 inputTodos.addEventListener('keypress', (e) => {
 
     //Создание задания для добавления в список по нажатию кнопки enter
-    if(e.key === 'Enter' && inputTodos.value !== null){
-
-        //Проверка задачи на валидность
-        if (inputTodos.value !== '' &&
-            (((inputTodos.value.match(/\s/g) || []).length) !== inputTodos.value.length)){
-
+    if(e.key === 'Enter'){
+        if (!!inputTodos.value.trim()){
             //Запись поля ввода в переменную и его очистка
             let taskText = ''
             inputTodos.value.toString().split(' ').map(i => i === '' ? '' : taskText += i + ' ')
@@ -22,19 +18,19 @@ inputTodos.addEventListener('keypress', (e) => {
             inputTodos.value = ''
 
             //Добавление задачи в локальное хранилище
-            let taskJson = {
-                title: taskText.toString(),
+            const taskData = {
+                title: taskText,
                 completed: false,
                 id: Date.now()
             }
-            storage.push(taskJson)
+            storage.push(taskData)
             localStorage.setItem('todoList', JSON.stringify(storage))
 
             //Создание элемента задачи для добавления в список
-            new Task(taskJson).createElement()
+            new Task(taskData).createElement()
             filteringTasks()
         }
-        else {
+        else{
             inputTodos.value = ''
         }
     }

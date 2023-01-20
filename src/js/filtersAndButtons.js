@@ -1,29 +1,36 @@
 import {removeTaskInMemory} from './localStorage';
 
+//Кнопки фильтров задач
+const allTasks = document.getElementById('All-Tasks')
+const activeTasks = document.getElementById('Active-Tasks')
+const completedTasks = document.getElementById('Completed-Tasks')
+
 //Смена страницы
-document.getElementById('All-Tasks').addEventListener('click', ()=>{urlReplace('#')})
-document.getElementById('Active-Tasks').addEventListener('click',()=>{urlReplace('#Active')})
-document.getElementById('Completed-Tasks').addEventListener('click',()=>{urlReplace('#Completed')})
+allTasks.addEventListener('click', () => urlReplace('#'))
+activeTasks.addEventListener('click', () => urlReplace('#Active'))
+completedTasks.addEventListener('click', () => urlReplace('#Completed'))
 
 //Функция для смены url страницы
 function urlReplace(filter){
-    let link = document.URL.split('/');
-    link[link.length-1] = filter;
-    window.location.href = link.join('/') ;
+    const link = document.URL.split('/')
+    link[link.length-1] = filter
+    window.location.href = link.join('/')
     filteringTasks()
 }
 
 //Кнопка очистки выполненных заданий
-document.getElementById('ClearCompleted').addEventListener('click',clearComplete)
+document.getElementById('Clear-Completed').addEventListener('click',clearComplete)
 
 //Контейнер с задачами
-const taskContainer = document.getElementById('Todo-List__Tasks')
+const taskContainer = document.getElementById('Task-Section')
 
 //Очистка выполненных задач
 function clearComplete(){
-    for (let i of taskContainer.querySelectorAll('.Completed')){
-        i.remove()
-        removeTaskInMemory(i.getAttribute('data-id'))
+    const completedTask = taskContainer.querySelectorAll('div.Completed')
+
+    for (let element of completedTask){
+        element.remove()
+        removeTaskInMemory(element.getAttribute('data-id'))
     }
 }
 
@@ -34,14 +41,16 @@ export function filteringTasks(){
         i.classList.remove('Active-Link')
     }
 
-    let link = document.URL.split('/')
-    switch (link[link.length-1]){
-        case '#Active': filter = [false]; document.getElementById('Active-Tasks').classList.add('Active-Link'); break;
-        case '#Completed': filter = [true]; document.getElementById('Completed-Tasks').classList.add('Active-Link'); break;
-        default: filter = [true,false]; document.getElementById('All-Tasks').classList.add('Active-Link'); break;
+    const link = document.URL.split('/')
+    const lastUrlComponent = link[link.length-1]
+
+    switch (lastUrlComponent){
+        case '#Active': filter = [false]; activeTasks.classList.add('Active-Link'); break;
+        case '#Completed': filter = [true]; completedTasks.classList.add('Active-Link'); break;
+        default: filter = [true,false]; allTasks.classList.add('Active-Link'); break;
     }
 
-    let tasksToShow = taskContainer.querySelectorAll('div.Todo-List__Tasks__Task')
+    const tasksToShow = taskContainer.querySelectorAll('div.Todo-List__Tasks__Task')
     for (let task of tasksToShow){
         if (filter.includes(task.classList.contains('Completed'))){
             task.style.display = 'inline-flex'
