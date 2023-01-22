@@ -1,29 +1,30 @@
 .Todo-List__Footer-Buttons
   display: inline-flex
-  justify-content: space-between
-  align-items: center
-
-  width: calc(100% - 6vh)
-  padding-left: 3vh
+  flex-direction: column
 
   margin-top: 1.5vw
-  font-size: 1vw
-
-  text-align: center
-  color: $strikemaster
+  gap: 1.5vw
+  width: calc(100% - 6vh)
+  padding-left: 3vh
   font-weight: 500
+  font-size: 1vw
+  @media (max-width: 1024px)
+    font-size: 1.5vh
 
-  button.Todo-List__Footer-Buttons__Link, button.Todo-List__Footer-Buttons__Input
-    padding-block: .2vw
+div.Todo-List__Footer-Buttons__Tasks-Type
+  display: inline-flex
+  justify-content: space-between
 
-    text-decoration: none
-    color: $strikemaster
-
-    user-select: none
+  button.Todo-List__Footer-Buttons__Link
+    width: 20%
+    @media (max-width: 1300px)
+      width: 30%
+    padding-top: .1vw
     cursor: pointer
-
+    color: $strikemaster
+    background: transparent
     border: 2px $strikemaster solid
-    border-radius: 8px
+    border-radius: 20px
     transition: .2s
 
     &:hover
@@ -32,65 +33,39 @@
     &:active
       scale: 1
 
-  button.Todo-List__Footer-Buttons__Input
-    border: none
-    background: transparent
-    white-space: nowrap
-    font-weight: 500
-    padding-inline: 0
-
   button.Todo-List__Footer-Buttons__Link.Active-Link
     color: $cosmic
     font-weight: 700
     border: 3px $cosmic solid
 
-
-
-div.Todo-List__Footer-Buttons__Tasks-Type
-  width: 50%
+div.Todo-List__Footer-Buttons__Second-Line
   display: inline-flex
   justify-content: space-around
 
-  button.Todo-List__Footer-Buttons__Link
+  height: 1em
+  text-align: center
+
+  p.Footer-Buttons__Second-Line__Tasks-Count
+    width: 20%
+    color: $strikemaster
+    margin: 0
+
+  button.Footer-Buttons__Second-Line__Other-Button
+    outline: none
+    border: none
+    padding-inline: 0
+
+    width: 20%
+    color: $strikemaster
+    cursor: pointer
     background: transparent
-    width: 6vw
 
+    transition: .3s
 
-p.Todo-List__Footer-Buttons__Tasks-Count
-  margin: 0
+    &:hover
+      scale: 1.1
+      color: $cosmic
 
+    &:active
+      scale: 1
 
-@media (max-width: 1500px)
-  .Todo-List__Footer-Buttons
-    display: grid
-    grid-template-rows: 4vh 6vh
-    grid-template-columns: 0 40% 5% 45% 0
-
-    margin-top: 2vh
-    font-size: 2vh
-
-    p.Todo-List__Footer-Buttons__Tasks-Count
-      justify-self: left
-      grid-column: 2/3
-      grid-row: 2
-
-    button.Todo-List__Footer-Buttons__Input
-      justify-self: right
-      grid-column: 4/5
-      grid-row: 2
-
-  div.Todo-List__Footer-Buttons__Tasks-Type
-    width: 100%
-    padding-left: 2px
-    justify-content: space-between
-    grid-column: 1/6
-
-    button.Todo-List__Footer-Buttons__Link
-      width: 25%
-
-@media (max-width: 600px)
-  .Todo-List__Footer-Buttons
-    font-size: .8em
-
-    div.Todo-List__Footer-Buttons__Tasks-Type>button.Todo-List__Footer-Buttons__Link
-        width: 30%

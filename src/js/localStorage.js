@@ -24,11 +24,8 @@ storageReading()
 
 //Функция удаления задачи
 export function removeTaskInMemory(dataId){
-    storage.filter(function (element, index){
-        if (element.id === dataId){
-            storage.splice(index,1)
-            localStorage.setItem('todoList', JSON.stringify(storage))
-            refreshTaskCounter()
-    }})
+    storage = storage.filter(element => element.id !== dataId)
+    localStorage.setItem('todoList', JSON.stringify(storage))
+    refreshTaskCounter()
 }
 

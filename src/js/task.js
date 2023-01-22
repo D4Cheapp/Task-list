@@ -9,7 +9,14 @@ export class Task{
     data_id = 0
     checked = false
 
-    //Создание родительского div контейнера
+    taskComponents = {
+        task: '',
+        customCheckbox: '',
+        completeInput: '',
+        deleteInput: '',
+        taskTitle: '',
+    }
+
     constructor(taskData) {
         this.text = taskData.title
         this.data_id = taskData.id
@@ -18,37 +25,49 @@ export class Task{
 
     //Функция создания задачи
     createElement(){
-        //Конвертация строки в html element
-        function stringToElement(htmlString){
-            const element = document.createElement('div')
-            element.innerHTML = htmlString
-            return element.firstChild
-        }
+        //Создание html структуры задачи
+        const taskHTML = `
+            <div class="Todo-List__Tasks__Task" style="display: inline-flex" data-id="${this.data_id}">
+                <label class="Todo-List__Tasks__Task__Custom-Checkbox">
+                    <input class="Todo-List__Tasks__Task__Toggle-Check" type="checkbox">
+                </label>
+                <textarea class="Todo-List__Tasks__Task__Task-Title" readonly="true" rows="1">
+                </textarea>
+                <button class="Todo-List__Tasks__Task__Delete-Task"></button>
+            </div>`
 
-        //Создание родительского div контейнера
-        const task = stringToElement(
-        `<div class="Todo-List__Tasks__Task" style="display: inline-flex" data-id="${this.data_id}"></div>`)
-        taskContainer.insertAdjacentElement('beforeend', task)
+        taskContainer.insertAdjacentHTML('beforeend', taskHTML)
+
+        //Получение добавленной задачи
+        this.taskComponents.task = taskContainer.querySelector(
+            `div.Todo-List__Tasks__Task[data-id='${this.data_id}']`)
+
+        //Получение чекбокса
+        this.taskComponents.customCheckbox = this.taskComponents.task.querySelector(
+            'label.Todo-List__Tasks__Task__Custom-Checkbox')
+
+        //Получение инпута чекбокса
+        this.taskComponents.completeInput = this.taskComponents.task.querySelector(
+            'input.Todo-List__Tasks__Task__Toggle-Check')
+
+        //Получение кнопки удаления
+        this.taskComponents.deleteInput = this.taskComponents.task.querySelector(
+            'button.Todo-List__Tasks__Task__Delete-Task')
+
+        //Получение текста задачи
+        this.taskComponents.taskTitle = this.taskComponents.task.querySelector(
+            'textarea.Todo-List__Tasks__Task__Task-Title')
+        this.taskComponents.taskTitle.value = this.text
 
         //Проверка на выполненность
         if (this.checked) {
-            task.classList.add('Completed')
+            this.taskComponents.task.classList.add('Completed')
         }
 
-        //Кастомный чекбокс
-        const customCheckbox = stringToElement(
-        `<label class="Todo-List__Tasks__Task__Custom-Checkbox"></label>`)
-        task.insertAdjacentElement('afterbegin', customCheckbox)
-
-        //Инпут чекбокса
-        const completeInput = stringToElement(
-        `<input class="Todo-List__Tasks__Task__Toggle-Check" type="checkbox">`)
-        customCheckbox.insertAdjacentElement('afterbegin', completeInput)
-
         //Изменение состояния в локальной памяти
-        completeInput.addEventListener('click', () => {
-            task.classList.toggle('Completed')
-            completeInput.setAttribute('check', 'check')
+        this.taskComponents.completeInput.addEventListener('click', () => {
+            this.taskComponents.task.classList.toggle('Completed')
+            this.taskComponents.completeInput.setAttribute('check', 'check')
             for (let i = 0; i < storage.length; i++) {
                 if (storage[i].id === this.data_id) {
                     storage[i].completed = !storage[i].completed
@@ -59,38 +78,30 @@ export class Task{
             refreshTaskCounter()
         })
 
-        //Текст задачи
-        const taskTitle  = stringToElement(
-`<textarea class="Todo-List__Tasks__Task__Task-Title" readonly="true" rows="1">
-          </textarea>`)
-        taskTitle.value = this.text.trim()
-        task.insertAdjacentElement('beforeend', taskTitle)
-
         //Кнопка удаления задачи
-        const deleteInput = stringToElement(
-        `<button class="Todo-List__Tasks__Task__Delete-Task"></button>`)
-        task.insertAdjacentElement('beforeend', deleteInput)
-
-        deleteInput.addEventListener('click', () => {
-            task.remove()
+        this.taskComponents.deleteInput.addEventListener('click', () => {
+            this.taskComponents.task.remove()
             removeTaskInMemory(this.data_id)
         })
 
         //Изменение задачи по двойному клику
-        task.addEventListener('dblclick',()=>{
-            this.editTask(taskTitle,customCheckbox,deleteInput,task)
+        this.taskComponents.task.addEventListener('dblclick',()=>{
+            this.editTask()
         })
 
         //Изменение размера контейнера
-        this.resizeTask(taskTitle,task)
-        window.addEventListener('resize', ()=>this.resizeTask(taskTitle,task))
+        this.resizeTask()
+        window.addEventListener('resize', () => this.resizeTask())
 
         //Изменение счетчика
         refreshTaskCounter()
     }
 
     //Функция для изменения размера задачи в зависимости от количества текста
-    resizeTask(text,task){
+    resizeTask(){
+        const task = this.taskComponents.task
+        const text = this.taskComponents.taskTitle
+
         text.style.height = 'auto'
         text.style.height = text.scrollHeight+'px'
 
@@ -98,7 +109,12 @@ export class Task{
     }
 
     //Редактирование задачи
-    editTask(textContainer,checkbox,deleteButton,taskContainer){
+    editTask(){
+        const taskContainer = this.taskComponents.task
+        const textContainer = this.taskComponents.taskTitle
+        const deleteButton = this.taskComponents.customCheckbox
+        const checkbox = this.taskComponents.deleteInput
+
         window.getSelection().removeAllRanges()
         textContainer.focus()
         textContainer.selectionStart = textContainer.value.length
@@ -116,15 +132,18 @@ export class Task{
                         deleteButton.click()
                         break
                     }
-                    else {
-                        let taskText = ''
-                        textContainer.value.toString().split(' ').map(i => i === '' ? '' : taskText += i + ' ')
-                        textContainer.value = taskText.trim()
-                        this.resizeTask(textContainer,taskContainer)
-                        task.title = textContainer.value
-                        localStorage.setItem('todoList', JSON.stringify(storage))
-                        break
+
+                    let taskText = ''
+                    const splitText = textContainer.value.toString().split(' ')
+                    for (let char of splitText) {
+                        if (char !== '')
+                            taskText += char + ' '
                     }
+                    textContainer.value = taskText.trim()
+                    this.resizeTask(textContainer,taskContainer)
+                    task.title = textContainer.value
+                    localStorage.setItem('todoList', JSON.stringify(storage))
+                    break
                 }
             }
 

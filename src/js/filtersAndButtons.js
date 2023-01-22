@@ -1,4 +1,5 @@
-import {removeTaskInMemory} from './localStorage';
+import {removeTaskInMemory, storage} from './localStorage';
+import {refreshTaskCounter} from "./userInputReading";
 
 //Кнопки фильтров задач
 const allTasks = document.getElementById('All-Tasks')
@@ -21,8 +22,34 @@ function urlReplace(filter){
 //Кнопка очистки выполненных заданий
 document.getElementById('Clear-Completed').addEventListener('click',clearComplete)
 
+//Кнопка переключения всех состояний задач
+document.getElementById('Toggle-State').addEventListener('click',findWitchState)
+
 //Контейнер с задачами
 const taskContainer = document.getElementById('Task-Section')
+
+//Выбор для завершения или для начала задач
+function findWitchState(){
+    const completedTasks = document.querySelectorAll('.Todo-List__Tasks__Task.Completed')
+    const uncompletedTasks = document.querySelectorAll('.Todo-List__Tasks__Task:not(.Completed)')
+    if (completedTasks.length === storage.length){
+        toggleState(completedTasks, false)
+    }
+    else{
+        toggleState(uncompletedTasks, true)
+    }
+}
+//Переключение состояний задач
+function toggleState(tasks, stateToToggle){
+    for (let index in storage) {
+        storage[index].completed = stateToToggle
+    }
+    for (let element of tasks){
+        !stateToToggle ? element.classList.remove('Completed') : element.classList.add('Completed')
+    }
+    localStorage.setItem('todoList', JSON.stringify(storage))
+    refreshTaskCounter()
+}
 
 //Очистка выполненных задач
 function clearComplete(){
@@ -30,7 +57,7 @@ function clearComplete(){
 
     for (let element of completedTask){
         element.remove()
-        removeTaskInMemory(element.getAttribute('data-id'))
+        removeTaskInMemory(+element.getAttribute('data-id'))
     }
 }
 
