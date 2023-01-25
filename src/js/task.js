@@ -57,7 +57,7 @@ export class Task{
         //Получение текста задачи
         this.taskComponents.taskTitle = this.taskComponents.task.querySelector(
             'textarea.Todo-List__Tasks__Task__Task-Title')
-        this.taskComponents.taskTitle.value = this.text
+        this.taskComponents.taskTitle.value = this.text.trim()
 
         //Добавление слушателя для переключения состояния задачи
         this.taskComponents.completeInput.addEventListener('click', () => this.checkTask())
