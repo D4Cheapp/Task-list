@@ -27,12 +27,12 @@ export class Task{
     createElement(){
         //Создание html структуры задачи
         const taskHTML = `
-            <div class="Todo-List__Tasks__Task" style="display: inline-flex" data-id="${this.data_id}">
+            <div class="Todo-List__Tasks__Task ${this.checked ? 'Completed' : ''}" 
+                   style="display: inline-flex" data-id="${this.data_id}">
                 <label class="Todo-List__Tasks__Task__Custom-Checkbox">
                     <input class="Todo-List__Tasks__Task__Toggle-Check" type="checkbox">
                 </label>
-                <textarea class="Todo-List__Tasks__Task__Task-Title" readonly="true" rows="1">
-                </textarea>
+                <textarea class="Todo-List__Tasks__Task__Task-Title" readonly="true" rows="1"></textarea>
                 <button class="Todo-List__Tasks__Task__Delete-Task"></button>
             </div>`
 
@@ -59,41 +59,39 @@ export class Task{
             'textarea.Todo-List__Tasks__Task__Task-Title')
         this.taskComponents.taskTitle.value = this.text
 
-        //Проверка на выполненность
-        if (this.checked) {
-            this.taskComponents.task.classList.add('Completed')
-        }
+        //Добавление слушателя для переключения состояния задачи
+        this.taskComponents.completeInput.addEventListener('click', () => this.checkTask())
 
-        //Изменение состояния в локальной памяти
-        this.taskComponents.completeInput.addEventListener('click', () => {
-            this.taskComponents.task.classList.toggle('Completed')
-            this.taskComponents.completeInput.setAttribute('check', 'check')
-            for (let i = 0; i < storage.length; i++) {
-                if (storage[i].id === this.data_id) {
-                    storage[i].completed = !storage[i].completed
-                    localStorage.setItem('todoList', JSON.stringify(storage))
-                }
-            }
-            filteringTasks()
-            refreshTaskCounter()
-        })
-
-        //Кнопка удаления задачи
-        this.taskComponents.deleteInput.addEventListener('click', () => {
-            this.taskComponents.task.remove()
-            removeTaskInMemory(this.data_id)
-        })
+        //Слушатель для удаления задачи
+        this.taskComponents.deleteInput.addEventListener('click', () => this.removeTask())
 
         //Изменение задачи по двойному клику
-        this.taskComponents.task.addEventListener('dblclick',()=>{
-            this.editTask()
-        })
+        this.taskComponents.task.addEventListener('dblclick',()=> this.editTask())
 
         //Изменение размера контейнера
         this.resizeTask()
         window.addEventListener('resize', () => this.resizeTask())
 
         //Изменение счетчика
+        refreshTaskCounter()
+    }
+
+    //Удаление задачи
+    removeTask(){
+        this.taskComponents.task.remove()
+        removeTaskInMemory(this.data_id)
+    }
+
+    //Изменение состояния задачи
+    checkTask(){
+        this.taskComponents.task.classList.toggle('Completed')
+        for (let i = 0; i < storage.length; i++) {
+            if (storage[i].id === this.data_id) {
+                storage[i].completed = !storage[i].completed
+                localStorage.setItem('todoList', JSON.stringify(storage))
+            }
+        }
+        filteringTasks()
         refreshTaskCounter()
     }
 
@@ -110,10 +108,9 @@ export class Task{
 
     //Редактирование задачи
     editTask(){
-        const taskContainer = this.taskComponents.task
-        const textContainer = this.taskComponents.taskTitle
-        const deleteButton = this.taskComponents.customCheckbox
-        const checkbox = this.taskComponents.deleteInput
+        const [taskContainer, textContainer, deleteButton, checkbox] =
+            [this.taskComponents.task, this.taskComponents.taskTitle,
+                this.taskComponents.customCheckbox, this.taskComponents.deleteInput]
 
         window.getSelection().removeAllRanges()
         textContainer.focus()
@@ -125,43 +122,48 @@ export class Task{
         textContainer.removeAttribute('readonly')
         textContainer.classList.add('Focus')
 
-        const disableFocus = (event,func) => {
-            for (let task of storage) {
-                if (task.id === this.data_id){
-                    if (!textContainer.value.trim()){
-                        deleteButton.click()
-                        break
-                    }
-
-                    let taskText = ''
-                    const splitText = textContainer.value.toString().split(' ')
-                    for (let char of splitText) {
-                        if (char !== '')
-                            taskText += char + ' '
-                    }
-                    textContainer.value = taskText.trim()
-                    this.resizeTask(textContainer,taskContainer)
-                    task.title = textContainer.value
-                    localStorage.setItem('todoList', JSON.stringify(storage))
-                    break
-                }
-            }
-
-            taskContainer.classList.remove('Edited')
-            textContainer.setAttribute('readonly','true')
-            textContainer.classList.remove('Focus')
-
-            deleteButton.removeAttribute('style')
-            checkbox.removeAttribute('style')
-            textContainer.removeEventListener(event, func)
-        }
-        textContainer.addEventListener('focusout', ()=>{disableFocus('focusout', disableFocus)})
+        textContainer.addEventListener('focusout', ()=>{this.disableFocus('focusout', this.disableFocus)})
 
         const enterCheck = (e)=>{
             if (e.key === 'Enter'){
-                disableFocus('keypress', enterCheck)
+                this.disableFocus('keypress', enterCheck)
             }
         }
         textContainer.addEventListener('keypress', enterCheck)
+    }
+
+    disableFocus(event,func){
+        const [taskContainer, textContainer, deleteButton, checkbox] =
+            [this.taskComponents.task, this.taskComponents.taskTitle,
+                this.taskComponents.customCheckbox, this.taskComponents.deleteInput]
+
+        for (let task of storage) {
+            if (task.id === this.data_id){
+                if (!textContainer.value.trim()){
+                    deleteButton.click()
+                    break
+                }
+
+                let taskText = ''
+                const splitText = textContainer.value.toString().split(' ')
+                for (let char of splitText) {
+                    if (char !== '')
+                        taskText += char + ' '
+                }
+                textContainer.value = taskText.trim()
+                this.resizeTask(textContainer,taskContainer)
+                task.title = textContainer.value
+                localStorage.setItem('todoList', JSON.stringify(storage))
+                break
+            }
+        }
+
+        taskContainer.classList.remove('Edited')
+        textContainer.setAttribute('readonly','true')
+        textContainer.classList.remove('Focus')
+
+        deleteButton.removeAttribute('style')
+        checkbox.removeAttribute('style')
+        textContainer.removeEventListener(event, func)
     }
 }

@@ -4,7 +4,6 @@
   "main": "src/main.js",
   "scripts": {
     "start": "webpack-dev-server",
-    "dev": "webpack --mode=development",
     "prod": "webpack --mode=production --define-process-env-node-env=production"
   },
   "repository": {
@@ -42,6 +41,7 @@
   "dependencies": {
     "autoprefixer": "^10.4.13",
     "normalize.css": "^8.0.1",
+    "pnpm": "^7.25.1",
     "postcss": "^8.4.20"
   }
 }

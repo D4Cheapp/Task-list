@@ -30,22 +30,19 @@ const taskContainer = document.getElementById('Task-Section')
 
 //Выбор для завершения или для начала задач
 function findWitchState(){
-    const completedTasks = document.querySelectorAll('.Todo-List__Tasks__Task.Completed')
-    const uncompletedTasks = document.querySelectorAll('.Todo-List__Tasks__Task:not(.Completed)')
-    if (completedTasks.length === storage.length){
-        toggleState(completedTasks, false)
-    }
-    else{
-        toggleState(uncompletedTasks, true)
-    }
+    const completedTasks = document.querySelectorAll('div.Todo-List__Tasks__Task.Completed')
+    const tasks = document.querySelectorAll('div.Todo-List__Tasks__Task')
+    const isCompleted = completedTasks.length === storage.length
+    toggleState(tasks, isCompleted)
 }
+
 //Переключение состояний задач
-function toggleState(tasks, stateToToggle){
+function toggleState(tasks, stateFromToggle){
     for (let index in storage) {
-        storage[index].completed = stateToToggle
+        storage[index].completed = stateFromToggle
     }
     for (let element of tasks){
-        !stateToToggle ? element.classList.remove('Completed') : element.classList.add('Completed')
+        stateFromToggle ? element.classList.remove('Completed') : element.classList.add('Completed')
     }
     localStorage.setItem('todoList', JSON.stringify(storage))
     refreshTaskCounter()
@@ -79,11 +76,7 @@ export function filteringTasks(){
 
     const tasksToShow = taskContainer.querySelectorAll('div.Todo-List__Tasks__Task')
     for (let task of tasksToShow){
-        if (filter.includes(task.classList.contains('Completed'))){
-            task.style.display = 'inline-flex'
-        }
-        else{
-            task.style.display = 'none'
-        }
+        let isShow = filter.includes(task.classList.contains('Completed'))
+            task.style.display = isShow ? 'inline-flex' : 'none'
     }
 }

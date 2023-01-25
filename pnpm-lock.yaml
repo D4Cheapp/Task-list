@@ -11,6 +11,7 @@ specifiers:
   file-loader: ^6.2.0
   html-webpack-plugin: ^5.5.0
   normalize.css: ^8.0.1
+  pnpm: ^7.25.1
   postcss: ^8.4.20
   postcss-loader: ^7.0.2
   postcss-preset-env: ^7.8.3
@@ -26,6 +27,7 @@ specifiers:
 dependencies:
   autoprefixer: 10.4.13_postcss@8.4.20
   normalize.css: 8.0.1
+  pnpm: 7.25.1
   postcss: 8.4.20
 
 devDependencies:
@@ -4651,6 +4653,12 @@ packages:
     dependencies:
       find-up: 4.1.0
     dev: true
+
+  /pnpm/7.25.1:
+    resolution: {integrity: sha512-y/jlADVxyk+scBwI0ALRf8QoUMgrWyONnD1voZaPTBI+D+aIXXiFG9pMk3eLhvEfc0nK8KUnnbDDBTywd7WsMw==}
+    engines: {node: '>=14.6'}
+    hasBin: true
+    dev: false
 
   /postcss-attribute-case-insensitive/5.0.2_postcss@8.4.20:
     resolution: {integrity: sha512-XIidXV8fDr0kKt28vqki84fRK8VW8eTuIa4PChv2MqKuT6C9UjmSKzen6KaWhWEoYvwxFCa7n/tC1SZ3tyq4SQ==}

@@ -9,7 +9,8 @@ const inputTodos = document.getElementById('User-Input')
 inputTodos.addEventListener('keypress', (e) => {
 
     //Создание задания для добавления в список по нажатию кнопки enter
-    if(e.key === 'Enter'){
+    if(e.key === 'Enter' && !!inputTodos.value.trim()){
+
         //Запись поля ввода в переменную и его очистка
         let taskText = ''
         const splitTask = inputTodos.value.toString().split(' ')
@@ -33,6 +34,7 @@ inputTodos.addEventListener('keypress', (e) => {
         new Task(taskData).createElement()
         filteringTasks()
     }
+
     //Верификация ввода
     if (!inputTodos.value.trim()){
         inputTodos.value = ''
@@ -42,7 +44,7 @@ inputTodos.addEventListener('keypress', (e) => {
 
 //Обновление счетчика задач
 export function refreshTaskCounter(){
-    let count = document.getElementsByClassName('Completed').length
+    let count = document.querySelectorAll('.Todo-List__Tasks__Task:not(.Completed)').length
     document.getElementById('Tasks-Counter').innerHTML =
         count + ' tasks left'
 }
