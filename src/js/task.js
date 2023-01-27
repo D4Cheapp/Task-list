@@ -66,7 +66,7 @@ export class Task{
         this.taskComponents.deleteInput.addEventListener('click', () => this.removeTask())
 
         //Изменение задачи по двойному клику
-        this.taskComponents.task.addEventListener('dblclick',()=> this.editTask())
+        this.taskComponents.task.addEventListener('dblclick', () => this.editTask())
 
         //Изменение размера контейнера
         this.resizeTask()
@@ -85,9 +85,9 @@ export class Task{
     //Изменение состояния задачи
     checkTask(){
         this.taskComponents.task.classList.toggle('Completed')
-        for (let i = 0; i < storage.length; i++) {
-            if (storage[i].id === this.data_id) {
-                storage[i].completed = !storage[i].completed
+        for (let index = 0; index < storage.length; index++) {
+            if (storage[index].id === this.data_id) {
+                storage[index].completed = !storage[index].completed
                 localStorage.setItem('todoList', JSON.stringify(storage))
             }
         }
@@ -108,9 +108,12 @@ export class Task{
 
     //Редактирование задачи
     editTask(){
-        const [taskContainer, textContainer, deleteButton, checkbox] =
-            [this.taskComponents.task, this.taskComponents.taskTitle,
-                this.taskComponents.customCheckbox, this.taskComponents.deleteInput]
+        const {
+            task: taskContainer,
+            taskTitle: textContainer,
+            customCheckbox: deleteButton,
+            deleteInput: checkbox
+        } = this.taskComponents
 
         window.getSelection().removeAllRanges()
         textContainer.focus()
@@ -133,9 +136,12 @@ export class Task{
     }
 
     disableFocus(event,func){
-        const [taskContainer, textContainer, deleteButton, checkbox] =
-            [this.taskComponents.task, this.taskComponents.taskTitle,
-                this.taskComponents.customCheckbox, this.taskComponents.deleteInput]
+        const {
+            task: taskContainer,
+            taskTitle: textContainer,
+            customCheckbox: deleteButton,
+            deleteInput: checkbox
+        } = this.taskComponents
 
         for (let task of storage) {
             if (task.id === this.data_id){
@@ -144,12 +150,7 @@ export class Task{
                     break
                 }
 
-                let taskText = ''
-                const splitText = textContainer.value.toString().split(' ')
-                for (let char of splitText) {
-                    if (char !== '')
-                        taskText += char + ' '
-                }
+                let taskText = textContainer.value.replace(/\s+/gm,' ').trim()
                 textContainer.value = taskText.trim()
                 this.resizeTask(textContainer,taskContainer)
                 task.title = textContainer.value

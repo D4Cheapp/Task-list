@@ -29,3 +29,8 @@ export function removeTaskInMemory(dataId){
     refreshTaskCounter()
 }
 
+export function removeSeveralTasksInMemory(idArray){
+    storage = storage.filter(task => !idArray.includes(task.id))
+    localStorage.setItem('todoList', JSON.stringify(storage))
+    refreshTaskCounter()
+}

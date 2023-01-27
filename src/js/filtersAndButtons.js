@@ -1,4 +1,4 @@
-import {removeTaskInMemory, storage} from './localStorage';
+import {removeSeveralTasksInMemory, removeTaskInMemory, storage} from './localStorage';
 import {refreshTaskCounter} from "./userInputReading";
 
 //Кнопки фильтров задач
@@ -38,12 +38,8 @@ function findWitchState(){
 
 //Переключение состояний задач
 function toggleState(tasks, stateFromToggle){
-    for (let index in storage) {
-        storage[index].completed = stateFromToggle
-    }
-    for (let element of tasks){
-        stateFromToggle ? element.classList.remove('Completed') : element.classList.add('Completed')
-    }
+    storage.forEach(index => index.completed = !stateFromToggle)
+    tasks.forEach(task => stateFromToggle ? task.classList.remove('Completed') : task.classList.add('Completed'))
     localStorage.setItem('todoList', JSON.stringify(storage))
     refreshTaskCounter()
 }
@@ -51,18 +47,20 @@ function toggleState(tasks, stateFromToggle){
 //Очистка выполненных задач
 function clearComplete(){
     const completedTask = taskContainer.querySelectorAll('div.Completed')
-
+    let completedTaskId = []
     for (let element of completedTask){
         element.remove()
-        removeTaskInMemory(+element.getAttribute('data-id'))
+        completedTaskId.push(+element.getAttribute('data-id'))
     }
+    removeSeveralTasksInMemory(completedTaskId)
 }
 
 //Функция сортировки задач
 export function filteringTasks(){
     let filter = []
-    for (let i of document.getElementsByClassName('Todo-List__Footer-Buttons__Link')) {
-        i.classList.remove('Active-Link')
+    const allButtons = document.getElementsByClassName('Todo-List__Footer-Buttons__Link')
+    for (let button of allButtons) {
+        button.classList.remove('Active-Link')
     }
 
     const link = document.URL.split('/')

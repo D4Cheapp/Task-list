@@ -12,13 +12,7 @@ inputTodos.addEventListener('keypress', (e) => {
     if(e.key === 'Enter' && !!inputTodos.value.trim()){
 
         //Запись поля ввода в переменную и его очистка
-        let taskText = ''
-        const splitTask = inputTodos.value.toString().split(' ')
-        for (let char of splitTask) {
-            if (char !== '')
-                taskText += char + ' '
-        }
-        taskText.trim()
+        let taskText = inputTodos.value.replace(/\s+/gm,' ').trim()
         inputTodos.value = ''
 
         //Добавление задачи в локальное хранилище
