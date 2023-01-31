@@ -30,7 +30,7 @@ const taskContainer = document.getElementById('Task-Section')
 
 //Выбор для завершения или для начала задач
 function findWitchState(){
-    const completedTasks = document.querySelectorAll('div.Todo-List__Tasks__Task.Completed')
+    const completedTasks = document.querySelectorAll('div.Completed')
     const tasks = document.querySelectorAll('div.Todo-List__Tasks__Task')
     const isCompleted = completedTasks.length === storage.length
     toggleState(tasks, isCompleted)
@@ -38,8 +38,11 @@ function findWitchState(){
 
 //Переключение состояний задач
 function toggleState(tasks, stateFromToggle){
-    storage.forEach(index => index.completed = !stateFromToggle)
-    tasks.forEach(task => stateFromToggle ? task.classList.remove('Completed') : task.classList.add('Completed'))
+    tasks.forEach((task,index) =>
+    {
+        storage[index].completed = !stateFromToggle
+        stateFromToggle ? task.classList.remove('Completed') : task.classList.add('Completed')
+    })
     localStorage.setItem('todoList', JSON.stringify(storage))
     refreshTaskCounter()
 }

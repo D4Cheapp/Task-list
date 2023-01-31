@@ -139,8 +139,8 @@ export class Task{
         const {
             task: taskContainer,
             taskTitle: textContainer,
-            customCheckbox: deleteButton,
-            deleteInput: checkbox
+            customCheckbox: checkbox,
+            deleteInput: deleteButton
         } = this.taskComponents
 
         for (let task of storage) {
