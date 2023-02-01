@@ -45,6 +45,7 @@ function toggleState(tasks, stateFromToggle){
     })
     localStorage.setItem('todoList', JSON.stringify(storage))
     refreshTaskCounter()
+    filteringTasks()
 }
 
 //Очистка выполненных задач
